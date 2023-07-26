@@ -15,9 +15,11 @@ class Player(object):
         self.bagpack = bagpack
 
     def collect_pokemon(self,pokemon):
-        print("You have collected a", pokemon.name)
-        self.bagpack.append(pokemon)
-        print(self.bagpack)
+        for key,value in pokemon.items():
+            who = key.name
+            print("You have collected a", who,"with a",value, "health")
+            self.bagpack.append(pokemon)
+            print(self.bagpack)
 
     def evolve_pokemon(self):
         pass
@@ -33,16 +35,15 @@ class Fire:
 class Charmander(Fire):
     def __init__(self, name):
         super().__init__(name)
-        self.hp = 100
+        
 
     def attack(self):
         return "Ember"
 
 
-class Charmeleon(Charmander):
+class Charmeleon(Charmander,):
     def __init__(self, name):
         super().__init__(name)
-        self.hp = 200
 
 
     def attack(self):
@@ -52,20 +53,25 @@ class Charmeleon(Charmander):
 class Charizard(Charmeleon):
     def __init__(self, name):
         super().__init__(name)
-        self.hp = 300
 
 
     def attack(self):
         return "Fire Blast"
 
 
-charmander = Charmander("Charmander")
-charmeleon = Charmeleon("Charmeleon")
-charizard = Charizard("Charizard")
+fire_charmander = Charmander("Charmander")
+charmander = {fire_charmander:100}
+
+fire_charmeleon = Charmeleon("Charmeleon")
+charmeleon = {fire_charmeleon:200}
+
+fire_charizard = Charizard("Charizard")
+charizard = {fire_charizard:300}
 
 
 
 bagpack = []
+basic_list = []
 naim = Player(bagpack)
 fire_type_pokemon = Fire(charmander) # need to find a way to pass in a collection of pokemon.
 light = game_engine(fire_type_pokemon,naim)
