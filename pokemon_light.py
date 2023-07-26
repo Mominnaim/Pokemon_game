@@ -8,6 +8,9 @@ class game_engine(object):
         
         if choose_pokemon == "1":
             self.player.collect_pokemon(charmander)
+
+    def battle_arena(self,pokemon_1,pokemon_2):
+        pass
     
 class Player(object):
 
@@ -15,35 +18,41 @@ class Player(object):
         self.bagpack = bagpack
 
     def collect_pokemon(self,pokemon):
-        for key,value in pokemon.items():
-            who = key.name
-            print("You have collected a", who,"with a",value, "health")
-            self.bagpack.append(pokemon)
-            print(self.bagpack)
+        print("You have collected a", pokemon.name,"with a",pokemon.hp, "health")
+        self.bagpack.append(pokemon)
+        
 
     def evolve_pokemon(self):
         pass
 
 class Fire:
-    def __init__(self, name):
+    def __init__(self, name,hp):
         self.name = name
-
+        self.hp = hp
     def attack(self):
         return "No attack defined for this Pokemon."
 
 
 class Charmander(Fire):
-    def __init__(self, name):
-        super().__init__(name)
+    def __init__(self, name, hp):
+        super().__init__(name,hp)
+        self.attacks = [Ember(),Scratch()]
+        self.attacks_limits = {'Ember':3,"Scratch":3}
         
+        
+    def use_attack(self, attack_name):
+        for attack in self.attacks:
+            if attack.name == attack_name and self.attack_limit.get(attack_name, 0) > 0:
+                self.attack_limit[attack_name] -=1
+                return attack.perform_attack()
+        return "You have either reached the limit for that attack or entered and invalid attack."
 
-    def attack(self):
-        return "Ember"
 
 
-class Charmeleon(Charmander,):
-    def __init__(self, name):
-        super().__init__(name)
+
+class Charmeleon(Charmander):
+    def __init__(self, name, hp):
+        super().__init__(name,hp)
 
 
     def attack(self):
@@ -51,30 +60,47 @@ class Charmeleon(Charmander,):
 
 
 class Charizard(Charmeleon):
-    def __init__(self, name):
-        super().__init__(name)
+    def __init__(self, name, hp):
+        super().__init__(name,hp)
 
 
     def attack(self):
         return "Fire Blast"
 
+class Attack(object):
 
-fire_charmander = Charmander("Charmander")
-charmander = {fire_charmander:100}
+    def __init__(self,name,dmg):
+        self.name = name
+        self.dmg = dmg
 
-fire_charmeleon = Charmeleon("Charmeleon")
-charmeleon = {fire_charmeleon:200}
+    def perform_attack(self,pokemon):
+        return f"{pokemon.name} used {self.name} and it does {self.dmg}"
 
-fire_charizard = Charizard("Charizard")
-charizard = {fire_charizard:300}
+class Ember(Attack):
+
+    def __init__(self):
+        super().__init__("Ember",20)
+
+class Scratch(Attack):
+
+    def __init__(self):
+        super().__init__("Scratch",10)
+
+        
+
+charmander = Charmander("Charmander",100)
+
+charmeleon = Charmeleon("Charmeleon",200)
+
+charizard = Charizard("Charizard",300)
+
 
 
 
 bagpack = []
 basic_list = []
 naim = Player(bagpack)
-fire_type_pokemon = Fire(charmander) # need to find a way to pass in a collection of pokemon.
-light = game_engine(fire_type_pokemon,naim)
+light = game_engine(charizard,naim)
 
 light.play()
 
