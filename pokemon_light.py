@@ -1,3 +1,6 @@
+import time
+
+
 class game_engine(object):
 
     def __init__(self, player):
@@ -5,30 +8,72 @@ class game_engine(object):
 
     # This is where the game is played
     def play(self):
-        # The user chooses the starter pokemon
-        choose_pokemon = input("what pokemon would you like to choose "
-                               "\n1.\tCharmander\n2.\tBulbasaur\n3.\tSquirtle\n4.\tChimchar\n=>")
 
-        # Choosing of the pokemon
-        if choose_pokemon == "1":
-            charmander = Charmander("charmander", 100)
-            self.player.collect_pokemon(charmander)
-        elif choose_pokemon == "2":
-            bulbasaur = Bulbasaur("Bulbasaur", 100)
-            self.player.collect_pokemon(bulbasaur)
-        elif choose_pokemon == "3":
-            squirtle = Squirtle("Squirtle", 100)
-            self.player.collect_pokemon(squirtle)
-        elif choose_pokemon == "4":
-            chimchar = Chimchar("Chimchar", 100)
-            self.player.collect_pokemon(chimchar)
+        while len(self.player.backpack) != 3:
 
-        for i in self.player.backpack:
-            print(f'{i.name} is your starter pokemon, train it well and become stronger together')
+            # The user chooses the starter pokemon
+            choose_pokemon = input("what pokemon would you like to choose "
+                                   "\n1.\tCharmander\n2.\tBulbasaur\n3.\tSquirtle\n4.\tChimchar\n=>")
+
+            # Choosing of the pokemon
+            if choose_pokemon == "1":
+                charmander = Charmander("charmander", 100)
+                self.player.collect_pokemon(charmander)
+            elif choose_pokemon == "2":
+                bulbasaur = Bulbasaur("Bulbasaur", 100)
+                self.player.collect_pokemon(bulbasaur)
+            elif choose_pokemon == "3":
+                squirtle = Squirtle("Squirtle", 100)
+                self.player.collect_pokemon(squirtle)
+            elif choose_pokemon == "4":
+                chimchar = Chimchar("Chimchar", 100)
+                self.player.collect_pokemon(chimchar)
+
+            print("This are the pokemons in your backpack")
+            for i in self.player.backpack:
+                print(f'{i.name}')
+            print()
+
+        self.battle_arena(mewtwo)
 
     # This is where the battle takes place
-    def battle_arena(self, pokemon_1, pokemon_2):
-        pass
+    def battle_arena(self, pokemon_2):
+
+        pokemon_1 = self.player.backpack[0]
+
+        while len(self.player.backpack) != 0:
+
+            damage = pokemon_1.attack()
+
+            print(f"It is now {pokemon_1.name}\'s turn to attack")
+            print(f"{pokemon_1.name} attacks {pokemon_2.name} for {damage} health")
+            time.sleep(1)
+            mewtwo.hp = mewtwo.hp - damage
+
+            if pokemon_2.hp <= 0:
+                exit("Mewtwo has lost, and you win the game")
+            else:
+                print(f"{pokemon_2.name} has {pokemon_2.hp} health left\n")
+
+            print(f"It is now {pokemon_2.name}\'s turn to attack")
+            damage = pokemon_2.attack()
+
+            print(f"{pokemon_2.name} attacks {pokemon_1.name} for {damage} health")
+            pokemon_1.hp = pokemon_1.hp - damage
+            time.sleep(1)
+
+            if pokemon_1.hp <= 0:
+                print(f"Your {pokemon_1.name} has lost.\n")
+                self.player.backpack.remove(pokemon_1)
+                if len(self.player.backpack) != 0:
+                    pokemon_1 = self.player.backpack[0]
+                    print(f"You threw in {pokemon_1.name} to fight")
+                    print(f"{pokemon_1.name} has {pokemon_1.hp} health\n")
+                    time.sleep(1)
+                elif len(self.player.backpack) == 0:
+                    exit(f"You have lost against {pokemon_2.name}")
+            else:
+                print(f"{pokemon_1.name} has {pokemon_1.hp} health left\n")
 
 
 class Player(object):
@@ -39,7 +84,7 @@ class Player(object):
         self.backpack = backpack
 
     def collect_pokemon(self, pokemon):
-        print("You have collected a", pokemon.name, "with a", pokemon.hp, "health")
+        print("You have collected a", pokemon.name, "with a", pokemon.hp, "health\n")
         self.backpack.append(pokemon)
 
     def evolve_pokemon(self, evolved_pokemon):
@@ -122,196 +167,221 @@ class Pokemon:
     def __init__(self, name, hp):
         self.name = name
         self.hp = hp
-        self.attacks = {}
-        self.attack_limits = {}
 
     def attack(self):
         pass
-
-    def use_attack(self, attack_name):
-        attack = self.attacks.get(attack_name)
-        if attack and self.attack_limits.get(attack_name) > 0:
-            self.attack_limits[attack_name] -= 1
-            return attack()
-        return "You have either reached the limit for that attack or entered an invalid attack."
 
 
 class Charizard(Pokemon):
     def __init__(self, name, hp):
         super().__init__(name, hp)
-        self.attacks = {self.crimson_strike()}
-        self.attack_limits = {"crimson strike":2}
 
-    def crimson_strike(self):
-        damage = 75
-        return f"{self.name} did Crimson strike and did {damage} damage!"
+    def attack(self):
+        damage = 100
+        return damage
+
+    def get_name(self):
+        return self.name
 
 
-class Charmeleon(Charizard):
+class Charmeleon(Pokemon):
     def __init__(self, name, hp):
         super().__init__(name, hp)
-        self.attacks = {self.fire_fang()}
-        self.attack_limits = {"fire fang": 3}
 
-    def fire_fang(self):
-        damage = 45
-        return f"{self.name} did fire fang and did {damage} damage!"
+    def attack(self):
+        damage = 50
+        return damage
+
+    def get_name(self):
+        return self.name
 
 
-class Charmander(Charmeleon):
+class Charmander(Pokemon):
     def __init__(self, name, hp):
         super().__init__(name, hp)
-        self.attacks = {self.ember()}
-        self.attack_limits = {"ember": 3}
 
-    def ember(self):
-        damage = 20
-        return f"{self.name} did Ember and did {damage} damage!"
+    def attack(self):
+        damage = 30
+        return damage
+
+    def get_name(self):
+        return self.name
 
 
 class Chimchar(Pokemon):
     def __init__(self, name, hp):
         super().__init__(name, hp)
-        self.attacks = {self.fire_punch()}
-        self.attack_limits = {"fire punch": 3}
 
-    def fire_punch(self):
-        damage = 20
-        return f"{self.name} did Fire punch and did {damage} damage!"
+    def attack(self):
+        damage = 30
+        return damage
+
+    def get_name(self):
+        return self.name
 
 
-class Monferno(Chimchar):
+class Monferno(Pokemon):
     def __init__(self, name, hp):
         super().__init__(name, hp)
-        self.attacks = {self.fire_flame_dance()}
-        self.attack_limits = {"fire flame dance": 3}
 
-    def fire_flame_dance(self):
-        damage = 45
-        return f"{self.name} did Fire flame dance and did {damage} damage!"
+    def attack(self):
+        damage = 50
+        return damage
+
+    def get_name(self):
+        return self.name
 
 
-class Infernape(Monferno):
+class Infernape(Pokemon):
     def __init__(self, name, hp):
         super().__init__(name, hp)
-        self.attacks = {self.volcanic_punch()}
-        self.attack_limits = {"volcanic punch": 2}
 
-    def volcanic_punch(self):
-        damage = 75
-        return f"{self.name} did Volcanic punch and did {damage} damage!"
+    def attack(self):
+        damage = 70
+        return damage
+
+    def get_name(self):
+        return self.name
 
 
 class Squirtle(Pokemon):
     def __init__(self, name, hp):
         super().__init__(name, hp)
-        self.attacks = {self.water_gun()}
-        self.attack_limits = {"water gun": 3}
 
-    def water_gun(self):
-        damage = 20
-        return f"{self.name} did Water gun and did {damage} damage!"
-
-
-class Wartortle(Squirtle):
-    def __init__(self, name, hp):
-        super().__init__(name, hp)
-        self.attacks = {self.aqua_splash()}
-        self.attack_limits = {"aqua splash": 3}
-
-    def aqua_splash(self):
+    def attack(self):
         damage = 30
-        return f"{self.name} did Aqua splash and did {damage} damage!"
+        return damage
+
+    def get_name(self):
+        return self.name
 
 
-class Blastoise(Wartortle):
+class Wartortle(Pokemon):
     def __init__(self, name, hp):
         super().__init__(name, hp)
-        self.attacks = {self.hydro_pump()}
-        self.attack_limits = {"hydro pump": 2}
 
-    def hydro_pump(self):
-        damage = 75
-        return f"{self.name} did Hydro pump and did {damage} damage!"
+    def attack(self):
+        damage = 50
+        return damage
+
+    def get_name(self):
+        return self.name
+
+
+class Blastoise(Pokemon):
+    def __init__(self, name, hp):
+        super().__init__(name, hp)
+
+    def attack(self):
+        damage = 70
+        return damage
+
+    def get_name(self):
+        return self.name
 
 
 class Bulbasaur(Pokemon):
     def __init__(self, name, hp):
         super().__init__(name, hp)
-        self.attacks = {self.razor_leaf()}
-        self.attack_limits = {"razor leaf": 3}
 
-    def razor_leaf(self):
-        damage =20
-        return f"{self.name} did Razor leaf and did {damage} damage!"
+    def attack(self):
+        damage = 30
+        return damage
+
+    def get_name(self):
+        return self.name
 
 
-class Ivysaur(Bulbasaur):
+class Ivysaur(Pokemon):
     def __init__(self, name, hp):
         super().__init__(name, hp)
-        self.attacks = {self.toxic_whip()}
-        self.attack_limits = {"toxic whip": 3}
 
-    def toxic_whip(self):
-        damage = 45
-        return f"{self.name} did Toxic whip and did {damage} damage!"
+    def attack(self):
+        damage = 50
+        return damage
+
+    def get_name(self):
+        return self.name
 
 
-class Venusaur(Ivysaur):
+class Venusaur(Pokemon):
     def __init__(self, name, hp):
         super().__init__(name, hp)
-        self.attacks = {self.jungle_hammer()}
-        self.attack_limits = {"jungle hammer": 2}
 
-    def  jungle_hammer(self):
-        damage = 75
-        return f"{self.name} did Jungle Hammer and did {damage} damage!"
+    def attack(self):
+        damage = 70
+        return damage
+
+    def get_name(self):
+        return self.name
 
 
 class Abra(Pokemon):
     def __init__(self, name, hp):
         super().__init__(name, hp)
-        self.attacks = {self.psychic_slap()}
-        self.attack_limits = {"psychic slap": 3}
 
-    def psychic_slap(self):
-        damage = 20
-        return f"{self.name} did Psychic slap and did {damage} damage!"
+    def attack(self):
+        damage = 30
+        return damage
+
+    def get_name(self):
+        return self.name
 
 
-class Kadabra(Abra):
+class Kadabra(Pokemon):
     def __init__(self, name, hp):
         super().__init__(name, hp)
-        self.attacks = {self.psychic_shock()}
-        self.attack_limits = {"psychic shock": 3}
 
-    def psychic_shock(self):
-        damage = 45
-        return f"{self.name} did Psychic shock and did {damage} damage!"
+    def attack(self):
+        damage = 50
+        return damage
+
+    def get_name(self):
+        return self.name
 
 
-class Alakazam(Kadabra):
+class Alakazam(Pokemon):
     def __init__(self, name, hp):
         super().__init__(name, hp)
-        self.attacks = {self.power_of_zen()}
-        self.attack_limits = {"power of zen": 2}
 
-    def power_of_zen(self):
-        damage = 80
-        return f"{self.name} used Power of Zen and did {damage} damage!"
+    def attack(self):
+        damage = 70
+        return damage
+
+    def get_name(self):
+        return self.name
 
 
-abra = Abra("Abra", 100)
+class Mewtwo(Pokemon):
+    def __init__(self, name, hp):
+        super().__init__(name, hp)
 
-dope = Charmeleon("charmeleon", 200)
-backpack = [charmander]
-naim = Player(backpack)
-naim.evolve_pokemon("charmander")
-basic_list = []
+    def attack(self):
+        damage = 50
+        return damage
 
-"""
-mt = []
-naim = Player(mt)
-light = game_engine(naim)
-light.play()
-"""
+    def get_name(self):
+        return self.name
+
+
+mewtwo = Mewtwo("Mewtwo", 300)
+
+
+def main():
+    players_backpack = []
+    naim = Player(players_backpack)
+    light = game_engine(naim)
+    light.play()
+
+
+if __name__ == "__main__":
+    main()
+
+# 1. Below
+# create a get_name function, every class should have an attack function -> check
+# Every class should inherit from the pokemon class -> check
+# Create mewtwo and have it inherit from the pokemon class. - > check
+
+# 2. Finish the battle function -> check
+# 3. Create 3 rounds to collect different pokemon -> check
+# 4. create a main function -> check
