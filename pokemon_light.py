@@ -1,40 +1,91 @@
 import time
+import random
 
 
 class game_engine(object):
 
-    def __init__(self, player):
+    def __init__(self, player, ):
         self.player = player
+        self.game_backpack = ["charmander", "bulbasaur", "squirtle", "chimchar", "abra"]
 
     # This is where the game is played
     def play(self):
 
-        while len(self.player.backpack) != 3:
+        while len(self.player.backpack) != 1:
 
             # The user chooses the starter pokemon
             choose_pokemon = input("what pokemon would you like to choose "
-                                   "\n1.\tCharmander\n2.\tBulbasaur\n3.\tSquirtle\n4.\tChimchar\n=>")
+                                   "\n1.\tCharmander\n2.\tBulbasaur\n3.\tSquirtle\n4.\tChimchar\npick a number =>")
 
             # Choosing of the pokemon
             if choose_pokemon == "1":
                 charmander = Charmander("charmander", 100)
                 self.player.collect_pokemon(charmander)
+                self.game_backpack.remove("charmander")
             elif choose_pokemon == "2":
-                bulbasaur = Bulbasaur("Bulbasaur", 100)
+                bulbasaur = Bulbasaur("bulbasaur", 100)
                 self.player.collect_pokemon(bulbasaur)
+                self.game_backpack.remove("bulbasaur")
             elif choose_pokemon == "3":
-                squirtle = Squirtle("Squirtle", 100)
+                squirtle = Squirtle("squirtle", 100)
                 self.player.collect_pokemon(squirtle)
+                self.game_backpack.remove("squirtle")
             elif choose_pokemon == "4":
-                chimchar = Chimchar("Chimchar", 100)
+                chimchar = Chimchar("chimchar", 100)
                 self.player.collect_pokemon(chimchar)
+                self.game_backpack.remove("chimchar")
 
-            print("This are the pokemons in your backpack")
+            print("This are the pokemon in your backpack")
             for i in self.player.backpack:
                 print(f'{i.name}')
             print()
 
-        self.battle_arena(mewtwo)
+        rounds = 1
+
+        while rounds != 7:
+            if rounds == 1 or 3 or 5 or 7:
+                prize_pokemon = random.choice(self.game_backpack)
+                print("You can either collect a pokemon or evolve a current pokemon")
+                collect_or_no = input(f"Would you like to collect a {prize_pokemon} (y/n) \n=>")
+                if collect_or_no == "y":
+                    if prize_pokemon == "charmander":
+                        charmander = Charmander("charmander", 100)
+                        self.player.collect_pokemon(charmander)
+                        self.game_backpack.remove("charmander")
+                    elif prize_pokemon == "bulbasaur":
+                        bulbasaur = Bulbasaur("Bulbasaur", 100)
+                        self.player.collect_pokemon(bulbasaur)
+                        self.game_backpack.remove("bulbasaur")
+                    elif prize_pokemon == "squirtle":
+                        squirtle = Squirtle("Squirtle", 100)
+                        self.player.collect_pokemon(squirtle)
+                        self.game_backpack.remove("squirtle")
+                    elif prize_pokemon == "chimchar":
+                        chimchar = Chimchar("chimchar", 100)
+                        self.player.collect_pokemon(chimchar)
+                        self.game_backpack.remove("chimchar")
+                    elif prize_pokemon == "abra":
+                        abra = Abra("abra", 100)
+                        self.player.collect_pokemon(abra)
+                        self.game_backpack.remove("abra")
+                elif collect_or_no == "n":
+                    print("Which pokemon would you like to evolve")
+                    print("This are the pokemon(s) in your backpack\n")
+                    number = 1
+                    for i in self.player.backpack:
+                        print(f'{number} -> {i.name}')
+                        number = number + 1
+
+                    pick_pokemon = input("Pick a pokemon from your backpack to evolve \nType your pokemon =>")
+                    self.player.evolve_pokemon(pick_pokemon.lower())
+
+                rounds = rounds + 1
+            rounds = rounds + 1
+            print(rounds)
+            for pokemon_name in self.player.backpack:
+                print(pokemon_name.name)
+
+            print()
 
     # This is where the battle takes place
     def battle_arena(self, pokemon_2):
@@ -92,7 +143,7 @@ class Player(object):
             for i, poke in enumerate(self.backpack):
                 if poke.name == "charmander":
                     self.backpack.pop(i)
-                    charmeleon = Charmeleon("Charmeleon", 200)
+                    charmeleon = Charmeleon("charmeleon", 200)
                     self.backpack.insert(i, charmeleon)
                 else:
                     print("This pokemon is not in your backpack")
@@ -100,7 +151,7 @@ class Player(object):
             for i, poke in enumerate(self.backpack):
                 if poke.name == "charmeleon":
                     self.backpack.pop(i)
-                    charizard = Charizard("Charizard", 300)
+                    charizard = Charizard("charizard", 300)
                     self.backpack.insert(i, charizard)
                 else:
                     print("This pokemon is not in your backpack")
@@ -108,56 +159,56 @@ class Player(object):
             for i, poke in enumerate(self.backpack):
                 if poke.name == "chimchar":
                     self.backpack.pop(i)
-                    monferno = Monferno("Monferno", 200)
+                    monferno = Monferno("monferno", 200)
                     self.backpack.insert(i, monferno)
         elif evolved_pokemon == "monferno":
             for i, poke in enumerate(self.backpack):
                 if poke.name == "monferno":
                     self.backpack.pop(i)
-                    infernape = Infernape("Infernape", 300)
+                    infernape = Infernape("infernape", 300)
                     self.backpack.insert(i, infernape)
         elif evolved_pokemon == "squirtle":
             for i, poke in enumerate(self.backpack):
                 if poke.name == "squirtle":
                     self.backpack.pop(i)
-                    wartotle = Wartortle("Wartotle", 200)
+                    wartotle = Wartortle("wartortle", 200)
                     self.backpack.insert(i, wartotle)
         elif evolved_pokemon == "wartortle":
             for i, poke in enumerate(self.backpack):
-                if poke.name == "wartotle":
+                if poke.name == "wartortle":
                     self.backpack.pop(i)
-                    blastoise = Blastoise("Blastoise", 300)
+                    blastoise = Blastoise("blastoise", 300)
                     self.backpack.insert(i, blastoise)
         elif evolved_pokemon == "bulbasaur":
             for i, poke in enumerate(self.backpack):
                 if poke.name == "bulbasaur":
                     self.backpack.pop(i)
-                    ivysaur = Ivysaur("Ivysaur", 200)
+                    ivysaur = Ivysaur("ivysaur", 200)
                     self.backpack.insert(i, ivysaur)
         elif evolved_pokemon == "ivysaur":
             for i, poke in enumerate(self.backpack):
                 if poke.name == "ivysaur":
                     self.backpack.pop(i)
-                    venusaur = Venusaur("Venesaur", 300)
+                    venusaur = Venusaur("venusaur", 300)
                     self.backpack.insert(i, venusaur)
         elif evolved_pokemon == "abra":
             for i, poke in enumerate(self.backpack):
                 if poke.name == "abra":
                     self.backpack.pop(i)
-                    kadabra = Kadabra("Kadabra", 200)
+                    kadabra = Kadabra("kadabra", 200)
                     self.backpack.insert(i, kadabra)
         elif evolved_pokemon == "kadabra":
             for i, poke in enumerate(self.backpack):
                 if poke.name == "kadabra":
                     self.backpack.pop(i)
-                    alakazam = Alakazam("Alakazam", 300)
+                    alakazam = Alakazam("alakazam", 300)
                     self.backpack.insert(i, alakazam)
         else:
             print("Invalid Pokemon name for evolution.")
             return False
 
-        for poke in self.backpack:
-            print(poke.name)
+        for i, poke in enumerate(self.backpack):
+            print(poke.name, "\n")
 
 
 class Pokemon:
@@ -171,6 +222,9 @@ class Pokemon:
     def attack(self):
         pass
 
+    def get_name(self):
+        return self.name
+
 
 class Charizard(Pokemon):
     def __init__(self, name, hp):
@@ -179,9 +233,6 @@ class Charizard(Pokemon):
     def attack(self):
         damage = 100
         return damage
-
-    def get_name(self):
-        return self.name
 
 
 class Charmeleon(Pokemon):
@@ -192,9 +243,6 @@ class Charmeleon(Pokemon):
         damage = 50
         return damage
 
-    def get_name(self):
-        return self.name
-
 
 class Charmander(Pokemon):
     def __init__(self, name, hp):
@@ -203,9 +251,6 @@ class Charmander(Pokemon):
     def attack(self):
         damage = 30
         return damage
-
-    def get_name(self):
-        return self.name
 
 
 class Chimchar(Pokemon):
@@ -216,9 +261,6 @@ class Chimchar(Pokemon):
         damage = 30
         return damage
 
-    def get_name(self):
-        return self.name
-
 
 class Monferno(Pokemon):
     def __init__(self, name, hp):
@@ -227,9 +269,6 @@ class Monferno(Pokemon):
     def attack(self):
         damage = 50
         return damage
-
-    def get_name(self):
-        return self.name
 
 
 class Infernape(Pokemon):
@@ -240,9 +279,6 @@ class Infernape(Pokemon):
         damage = 70
         return damage
 
-    def get_name(self):
-        return self.name
-
 
 class Squirtle(Pokemon):
     def __init__(self, name, hp):
@@ -251,9 +287,6 @@ class Squirtle(Pokemon):
     def attack(self):
         damage = 30
         return damage
-
-    def get_name(self):
-        return self.name
 
 
 class Wartortle(Pokemon):
@@ -264,9 +297,6 @@ class Wartortle(Pokemon):
         damage = 50
         return damage
 
-    def get_name(self):
-        return self.name
-
 
 class Blastoise(Pokemon):
     def __init__(self, name, hp):
@@ -275,9 +305,6 @@ class Blastoise(Pokemon):
     def attack(self):
         damage = 70
         return damage
-
-    def get_name(self):
-        return self.name
 
 
 class Bulbasaur(Pokemon):
@@ -288,9 +315,6 @@ class Bulbasaur(Pokemon):
         damage = 30
         return damage
 
-    def get_name(self):
-        return self.name
-
 
 class Ivysaur(Pokemon):
     def __init__(self, name, hp):
@@ -299,9 +323,6 @@ class Ivysaur(Pokemon):
     def attack(self):
         damage = 50
         return damage
-
-    def get_name(self):
-        return self.name
 
 
 class Venusaur(Pokemon):
@@ -312,9 +333,6 @@ class Venusaur(Pokemon):
         damage = 70
         return damage
 
-    def get_name(self):
-        return self.name
-
 
 class Abra(Pokemon):
     def __init__(self, name, hp):
@@ -323,9 +341,6 @@ class Abra(Pokemon):
     def attack(self):
         damage = 30
         return damage
-
-    def get_name(self):
-        return self.name
 
 
 class Kadabra(Pokemon):
@@ -336,9 +351,6 @@ class Kadabra(Pokemon):
         damage = 50
         return damage
 
-    def get_name(self):
-        return self.name
-
 
 class Alakazam(Pokemon):
     def __init__(self, name, hp):
@@ -347,9 +359,6 @@ class Alakazam(Pokemon):
     def attack(self):
         damage = 70
         return damage
-
-    def get_name(self):
-        return self.name
 
 
 class Mewtwo(Pokemon):
