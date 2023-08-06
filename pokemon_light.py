@@ -48,19 +48,18 @@ class game_engine(object):
 
             if rounds in [1,3,5,7]:
                 prize_pokemon = random.choice(self.game_backpack)
-                print("You can either collect a pokemon or evolve a current pokemon")
-                collect_or_no = input(f"Would you like to collect a {prize_pokemon} (y/n) \n=>")
-                if collect_or_no == "y":
+                pick_option = input(f"1. Collect a {prize_pokemon}\n2. Evolve a current pokemon\n=>")
+                if pick_option == "1":
                     if prize_pokemon == "charmander":
                         charmander = Charmander("charmander", 100)
                         self.player.collect_pokemon(charmander)
                         self.game_backpack.remove("charmander")
                     elif prize_pokemon == "bulbasaur":
-                        bulbasaur = Bulbasaur("Bulbasaur", 100)
+                        bulbasaur = Bulbasaur("bulbasaur", 100)
                         self.player.collect_pokemon(bulbasaur)
                         self.game_backpack.remove("bulbasaur")
                     elif prize_pokemon == "squirtle":
-                        squirtle = Squirtle("Squirtle", 100)
+                        squirtle = Squirtle("squirtle", 100)
                         self.player.collect_pokemon(squirtle)
                         self.game_backpack.remove("squirtle")
                     elif prize_pokemon == "chimchar":
@@ -71,7 +70,7 @@ class game_engine(object):
                         abra = Abra("abra", 100)
                         self.player.collect_pokemon(abra)
                         self.game_backpack.remove("abra")
-                elif collect_or_no == "n":
+                elif pick_option == "2":
                     print("Which pokemon would you like to evolve")
                     print("This are the pokemon(s) in your backpack\n")
                     number = 1
@@ -79,8 +78,23 @@ class game_engine(object):
                         print(f'{number} -> {i.name}')
                         number = number + 1
 
-                    pick_pokemon = input("Pick a pokemon from your backpack to evolve \nType your pokemon =>")
-                    self.player.evolve_pokemon(pick_pokemon.lower())
+                    pick_pokemon = input("Pick a pokemon from your backpack to evolve \nType in the number =>")
+                    if pick_pokemon == "1":
+                        evolving_pokemon = self.player.backpack[0]
+                        self.player.evolve_pokemon(evolving_pokemon.name)
+                    elif pick_pokemon == "2":
+                        evolving_pokemon = self.player.backpack[1]
+                        self.player.evolve_pokemon(evolving_pokemon.name)
+                    elif pick_pokemon == "3":
+                        evolving_pokemon = self.player.backpack[2]
+                        self.player.evolve_pokemon(evolving_pokemon.name)
+                    elif pick_pokemon == "4":
+                        evolving_pokemon = self.player.backpack[3]
+                        self.player.evolve_pokemon(evolving_pokemon.name)
+                    elif pick_pokemon == "5":
+                        evolving_pokemon = self.player.backpack[4]
+                        self.player.evolve_pokemon(evolving_pokemon.name)
+                    
 
             elif rounds == 2:
                 wild_charmander = Charmander("wild charmander", 100)
@@ -103,11 +117,11 @@ class game_engine(object):
                 opponent_pokemon = random.choice(level_two_pokemon)
                 self.battle_arena(opponent_pokemon)
             elif rounds == 6:
-                wild_alakazam = ("a wild Alakazam", 300)
-                wild_venusaur = ("a wild Venusaur", 300)
-                wild_charizard = ("a wild Charizard", 300)
-                wild_blastoise = ("a wild Blastoise", 300)
-                wild_infernape = ("a wild Infernape", 300)
+                wild_alakazam = Alakazam("a wild Alakazam", 300)
+                wild_venusaur = Venusaur("a wild Venusaur", 300)
+                wild_charizard = Charizard("a wild Charizard", 300)
+                wild_blastoise = Blastoise("a wild Blastoise", 300)
+                wild_infernape = Infernape("a wild Infernape", 300)
                 level_three_pokemon = [wild_charizard,wild_infernape,wild_alakazam,wild_venusaur,wild_blastoise]
                 opponent_pokemon = random.choice(level_three_pokemon)
                 self.battle_arena(opponent_pokemon)
@@ -119,7 +133,24 @@ class game_engine(object):
     # This is where the battle takes place
     def battle_arena(self, pokemon_2):
 
-        pokemon_1 = self.player.backpack[0]
+        print("Choose one of your pokemon to be your battling pokemon.\n")
+        number = 1
+        for i in (self.player.backpack):
+            print(f'{number} -> {i.name}')
+            number = number + 1
+        battling_pokemon = input("\n=> ")
+
+        if battling_pokemon == "1":
+            pokemon_1 = self.player.backpack[0]
+        elif battling_pokemon == "2":
+            pokemon_1 = self.player.backpack[1]
+        elif battling_pokemon == "3":
+            pokemon_1 = self.player.backpack[2]
+        elif battling_pokemon == "4":
+            pokemon_1 = self.player.backpack[3]
+        elif battling_pokemon == "5":
+            pokemon_1 = self.player.backpack[4]
+        
 
         while len(self.player.backpack) != 0:
 
@@ -132,6 +163,8 @@ class game_engine(object):
 
             if pokemon_2.hp <= 0:
                 print(f"{pokemon_2.name} has lost, and you win the game")
+                winning_evolution = pokemon_1.name
+                self.player.evolve_pokemon(winning_evolution)
                 return True
             else:
                 print(f"{pokemon_2.name} has {pokemon_2.hp} health left\n")
@@ -147,7 +180,22 @@ class game_engine(object):
                 print(f"Your {pokemon_1.name} has lost.\n")
                 self.player.backpack.remove(pokemon_1)
                 if len(self.player.backpack) != 0:
-                    pokemon_1 = self.player.backpack[0]
+                    number = 1
+                    for i in (self.player.backpack):
+                        print(f'{number} -> {i.name}')
+                        number = number + 1
+                    battling_pokemon = input("\n=> ")
+
+                    if battling_pokemon == "1":
+                        pokemon_1 = self.player.backpack[0]
+                    elif battling_pokemon == "2":
+                        pokemon_1 = self.player.backpack[1]
+                    elif battling_pokemon == "3":
+                        pokemon_1 = self.player.backpack[2]
+                    elif battling_pokemon == "4":
+                        pokemon_1 = self.player.backpack[3]
+                    elif battling_pokemon == "5":
+                        pokemon_1 = self.player.backpack[4]
                     print(f"You threw in {pokemon_1.name} to fight")
                     print(f"{pokemon_1.name} has {pokemon_1.hp} health\n")
                     time.sleep(1)
