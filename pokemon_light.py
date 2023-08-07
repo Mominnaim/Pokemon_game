@@ -8,7 +8,6 @@ class game_engine(object):
         self.player = player
         self.game_backpack = ["charmander", "bulbasaur", "squirtle", "chimchar", "abra"]
 
-
     # This is where the game is played
     def play(self):
 
@@ -46,7 +45,7 @@ class game_engine(object):
         while rounds != 7:
             print(f'this is round {rounds}\n\n')
 
-            if rounds in [1,3,5,7]:
+            if rounds in [1, 3, 5, 7]:
                 prize_pokemon = random.choice(self.game_backpack)
                 pick_option = input(f"1. Collect a {prize_pokemon}\n2. Evolve a current pokemon\n=>")
                 if pick_option == "1":
@@ -94,40 +93,40 @@ class game_engine(object):
                     elif pick_pokemon == "5":
                         evolving_pokemon = self.player.backpack[4]
                         self.player.evolve_pokemon(evolving_pokemon.name)
-                    
+
 
             elif rounds == 2:
                 wild_charmander = Charmander("wild charmander", 100)
-                wild_abra = Abra("wild abra",100)
-                wild_bulbasaur = Bulbasaur("wild bulbasuar",100)
-                wild_chimchar = Chimchar("wild chimchar",100)
-                wild_squirtle = Squirtle("wild squirtle",100)
-                
-                level_one_pokemon = [wild_abra,wild_bulbasaur,wild_charmander,wild_chimchar,wild_squirtle]
-                opponent_pokemon = random.choice(level_one_pokemon)
-                self.battle_arena(opponent_pokemon)
-            elif rounds == 4:
-                wild_charmeleon = Charmeleon("wild charmeleon",200)
-                wild_ivysaur = Ivysaur("wild ivysaur",200)
-                wild_kadabra = Kadabra("wild kadabra",200)
-                wild_wortortle = Wartortle("wild wartortle",200)
-                wild_monferno = Monferno("wild monferno",200)
+                wild_abra = Abra("wild abra", 100)
+                wild_bulbasaur = Bulbasaur("wild bulbasuar", 100)
+                wild_chimchar = Chimchar("wild chimchar", 100)
+                wild_squirtle = Squirtle("wild squirtle", 100)
 
-                level_two_pokemon = [wild_charmeleon,wild_kadabra,wild_ivysaur,wild_monferno,wild_wortortle]
+                level_one_pokemon = [wild_abra, wild_bulbasaur, wild_charmander, wild_chimchar, wild_squirtle]
+                opponent_pokemon = random.choice(level_one_pokemon)
+                self.battle_arena(wild_charmander)
+            elif rounds == 4:
+                wild_charmeleon = Charmeleon("wild charmeleon", 200)
+                wild_ivysaur = Ivysaur("wild ivysaur", 200)
+                wild_kadabra = Kadabra("wild kadabra", 200)
+                wild_wortortle = Wartortle("wild wartortle", 200)
+                wild_monferno = Monferno("wild monferno", 200)
+
+                level_two_pokemon = [wild_charmeleon, wild_kadabra, wild_ivysaur, wild_monferno, wild_wortortle]
                 opponent_pokemon = random.choice(level_two_pokemon)
-                self.battle_arena(opponent_pokemon)
+                self.battle_arena(wild_charmeleon)
             elif rounds == 6:
                 wild_alakazam = Alakazam("a wild Alakazam", 300)
                 wild_venusaur = Venusaur("a wild Venusaur", 300)
                 wild_charizard = Charizard("a wild Charizard", 300)
                 wild_blastoise = Blastoise("a wild Blastoise", 300)
                 wild_infernape = Infernape("a wild Infernape", 300)
-                level_three_pokemon = [wild_charizard,wild_infernape,wild_alakazam,wild_venusaur,wild_blastoise]
+                level_three_pokemon = [wild_charizard, wild_infernape, wild_alakazam, wild_venusaur, wild_blastoise]
                 opponent_pokemon = random.choice(level_three_pokemon)
                 self.battle_arena(opponent_pokemon)
             elif rounds == 8:
                 pass
-            
+
             rounds = rounds + 1
 
     # This is where the battle takes place
@@ -150,13 +149,13 @@ class game_engine(object):
             pokemon_1 = self.player.backpack[3]
         elif battling_pokemon == "5":
             pokemon_1 = self.player.backpack[4]
-        
 
         while len(self.player.backpack) != 0:
 
-            damage = pokemon_1.attack()
-
             print(f"It is now {pokemon_1.name}\'s turn to attack")
+
+            damage = pokemon_1.use_attack()
+
             print(f"{pokemon_1.name} attacks {pokemon_2.name} for {damage} health")
             time.sleep(1)
             pokemon_2.hp = pokemon_2.hp - damage
@@ -297,7 +296,7 @@ class Pokemon:
         self.name = name
         self.hp = hp
 
-    def attack(self):
+    def attack_(self):
         pass
 
     def get_name(self):
@@ -307,28 +306,102 @@ class Pokemon:
 class Charizard(Pokemon):
     def __init__(self, name, hp):
         super().__init__(name, hp)
+        self.attack = {"Crimson strike": self.crimson_strike(), "Fire breathe": self.fire_breathe()}
 
     def attack(self):
-        damage = 100
+        list_of_attacks = [self.crimson_strike(), self.fire_breathe()]
+        random_attack = random.choice(list_of_attacks)
+        if random_attack == self.crimson_strike():
+            return self.crimson_strike()
+        elif random_attack == self.fire_breathe():
+            return self.fire_breathe()
+
+    def crimson_strike(self):
+        print("Charizard uses Crimson Strike!")
+        damage = 75
         return damage
+
+    def fire_breathe(self):
+        print("Charizard uses Fire Breathe!")
+        damage = 60
+        return damage
+
+    def use_attack(self):
+        i = 1
+        for key, value in self.attack.items():
+            print(f'{i} --> {key}')
+            i = i + 1
+
+        pick_attack = input(f'Which attack would you like to use \nPick a number =>')
+
+        if pick_attack == "1":
+            return self.crimson_strike()
+        elif pick_attack == "2":
+            return self.fire_breathe()
 
 
 class Charmeleon(Pokemon):
     def __init__(self, name, hp):
         super().__init__(name, hp)
+        self.attacking = {"Fire tail": self.fire_tail(), "Fire scratch": self.fire_scratch()}
 
     def attack(self):
+        list_of_attacks = [self.fire_tail(), self.fire_scratch()]
+        random_attack = random.choice(list_of_attacks)
+        if random_attack == self.fire_tail():
+            return self.fire_tail()
+        elif random_attack == self.fire_scratch():
+            return self.fire_scratch()
+
+    def fire_tail(self):
+        print("Charmeleon uses Fire Tail!")
         damage = 50
         return damage
+
+    def fire_scratch(self):
+        print("Charmeleon uses Fire Scratch")
+        damage = 50
+        return damage
+
+    def use_attack(self):
+        i = 1
+        for key, value in self.attacking.items():
+            print(f'{i} --> {key}')
+            i = i + 1
+
+        pick_attack = input(f'Which attack would you like to use \nPick a number =>')
+
+        if pick_attack == "1":
+            return self.fire_tail()
+        elif pick_attack == "2":
+            return self.fire_scratch()
 
 
 class Charmander(Pokemon):
     def __init__(self, name, hp):
         super().__init__(name, hp)
+        self.attacking = {"Ember": self.ember()}
 
     def attack(self):
+        print("Charmander uses Ember!")
         damage = 30
         return damage
+
+    def ember(self):
+        print("Charmander uses Ember!")
+        damage = 30
+        return damage
+
+    def use_attack(self):
+        i = 1
+        for key, value in self.attacking.items():
+            print(f'{i} --> {key}')
+            i = i + 1
+
+        pick_attack = input(f'Which attack would you like to use \nPick a number =>')
+
+        if pick_attack == "1":
+            return self.ember()
 
 
 class Chimchar(Pokemon):
