@@ -4,20 +4,30 @@ import random
 
 class game_engine(object):
 
+
+    # We need two things in this game, and that is the pokemon in the game and the player.
+
     def __init__(self, player):
         self.player = player
         self.game_backpack = ["charmander", "bulbasaur", "squirtle", "chimchar", "abra"]
 
+        
+
     # This is where the game is played
+
     def play(self):
+
+        # This is where you will choose your starter pokemon.
 
         while len(self.player.backpack) != 1:
 
             # The user chooses the starter pokemon
+
             choose_pokemon = input("what pokemon would you like to choose "
                                    "\n1.\tCharmander\n2.\tBulbasaur\n3.\tSquirtle\n4.\tChimchar\npick a number =>")
 
             # Choosing of the pokemon
+
             if choose_pokemon == "1":
                 charmander = Charmander("charmander", 100)
                 self.player.collect_pokemon(charmander)
@@ -40,10 +50,14 @@ class game_engine(object):
                 print(f'{i.name}')
             print()
 
-        rounds = 1
 
-        while rounds != 8:
+        # This is where the round will commence starting from 1 to 9.
+        rounds = 1
+        while rounds != 9:
             print(f'this is round {rounds}\n\n')
+
+            # If the rounds equal an odd number then the user can either collect or evovle their current pokemon.
+            # In this case you are collecting a pokemon
 
             if rounds in [1, 3, 5, 7]:
                 prize_pokemon = random.choice(self.game_backpack)
@@ -77,6 +91,8 @@ class game_engine(object):
                         print(f'{number} -> {i.name}')
                         number = number + 1
 
+                    # In this case you are evolving a pokemon.
+
                     pick_pokemon = input("Pick a pokemon from your backpack to evolve \nType in the number =>")
                     if pick_pokemon == "1":
                         evolving_pokemon = self.player.backpack[0]
@@ -94,7 +110,7 @@ class game_engine(object):
                         evolving_pokemon = self.player.backpack[4]
                         self.player.evolve_pokemon(evolving_pokemon.name)
 
-
+            # Rounds 2,4,6, and 8 will be fighting rounds where it gets progressively harder.
             elif rounds == 2:
                 wild_charmander = Charmander("wild charmander", 100)
                 wild_abra = Abra("wild abra", 100)
@@ -104,7 +120,7 @@ class game_engine(object):
 
                 level_one_pokemon = [wild_abra, wild_bulbasaur, wild_charmander, wild_chimchar, wild_squirtle]
                 opponent_pokemon = random.choice(level_one_pokemon)
-                self.battle_arena(opponent_pokemon)
+                self.battle_arena(wild_charmander)
             elif rounds == 4:
                 wild_charmeleon = Charmeleon("wild charmeleon", 200)
                 wild_ivysaur = Ivysaur("wild ivysaur", 200)
@@ -114,7 +130,7 @@ class game_engine(object):
 
                 level_two_pokemon = [wild_charmeleon, wild_kadabra, wild_ivysaur, wild_monferno, wild_wortortle]
                 opponent_pokemon = random.choice(level_two_pokemon)
-                self.battle_arena(opponent_pokemon)
+                self.battle_arena(wild_charmeleon)
             elif rounds == 6:
                 wild_alakazam = Alakazam("a wild Alakazam", 300)
                 wild_venusaur = Venusaur("a wild Venusaur", 300)
@@ -123,7 +139,7 @@ class game_engine(object):
                 wild_infernape = Infernape("a wild Infernape", 300)
                 level_three_pokemon = [wild_charizard, wild_infernape, wild_alakazam, wild_venusaur, wild_blastoise]
                 opponent_pokemon = random.choice(level_three_pokemon)
-                self.battle_arena(opponent_pokemon)
+                self.battle_arena(wild_charizard)
             elif rounds == 8:
                 print("Get ready to fight the boss MEWTWO!!!")
                 self.battle_arena(mewtwo)
@@ -132,6 +148,9 @@ class game_engine(object):
 
     # This is where the battle takes place
     def battle_arena(self, pokemon_2):
+
+        # You choose your battling pokemon
+
 
         print("Choose one of your pokemon to be your battling pokemon.\n")
         number = 1
@@ -151,16 +170,23 @@ class game_engine(object):
         elif battling_pokemon == "5":
             pokemon_1 = self.player.backpack[4]
 
+        # If the backpack aint empty then the while loops keeps running, and the fighting is still on.
         while len(self.player.backpack) != 0:
 
             print(f"It is now {pokemon_1.name}\'s turn to attack")
 
-            damage = pokemon_1.use_attack()
+            damage, special_effect = pokemon_1.use_attack()
+            
 
             print(f"{pokemon_1.name} attacks {pokemon_2.name} for {damage} health")
             time.sleep(1)
             pokemon_2.hp = pokemon_2.hp - damage
 
+            if special_effect:
+                print(f"{pokemon_2.name} is burned!")
+                special_effect.apply_effect(pokemon_2)
+
+            # If the enemy pokemon dies, then whichever of your pokemon deals the winning blow gets to evovle.
             if pokemon_2.hp <= 0:
                 print(f"{pokemon_2.name} has lost, and you win the game")
                 self.player.evolve_pokemon(pokemon_1.name)
@@ -169,12 +195,18 @@ class game_engine(object):
                 print(f"{pokemon_2.name} has {pokemon_2.hp} health left\n")
 
             print(f"It is now {pokemon_2.name}\'s turn to attack")
-            damage = pokemon_2.attack()
+            damage,special_effect = pokemon_2.attack()
+
+            if special_effect:
+                print(f"{pokemon_1.name} is burned!")
+                special_effect.apply_effect(pokemon_2)
+
 
             print(f"{pokemon_2.name} attacks {pokemon_1.name} for {damage} health")
             pokemon_1.hp = pokemon_1.hp - damage
             time.sleep(1)
 
+            # If your pokemon dies, then they get removed from the list, and you have to throw in another pokemon to fight, if your backpack is empty then you lose the game.
             if pokemon_1.hp <= 0:
                 print(f"Your {pokemon_1.name} has lost.\n")
                 self.player.backpack.remove(pokemon_1)
@@ -211,10 +243,12 @@ class Player(object):
     def __init__(self, backpack):
         self.backpack = backpack
 
+    # You simply just collect a pokmemon and put in your backpack.
     def collect_pokemon(self, pokemon):
         print("You have collected a", pokemon.name, "with a", pokemon.hp, "health\n")
         self.backpack.append(pokemon)
 
+    # This is where the evolution happens.
     def evolve_pokemon(self, evolved_pokemon):
         if evolved_pokemon == "charmander" or evolved_pokemon == "Charmander":
             for i, poke in enumerate(self.backpack):
@@ -309,18 +343,19 @@ class Charizard(Pokemon):
     def attack(self):
         list_of_attacks = [self.crimson_strike, self.fire_breathe]
         random_attack = random.choice(list_of_attacks)
-        damage = random_attack()
-        return damage
+        damage, special_effect = random_attack()
+        return damage, special_effect
 
     def crimson_strike(self):
         print("Charizard uses Crimson Strike!")
         damage = 75
-        return damage
+        return damage, None     
 
     def fire_breathe(self):
         print("Charizard uses Fire Breathe!")
+        special_effect = StatusEffect(name="burned", duration=3, damage_per_turn=30)
         damage = 60
-        return damage
+        return damage, special_effect
 
     def use_attack(self):
         i = 1
@@ -344,19 +379,19 @@ class Charmeleon(Pokemon):
     def attack(self):
         list_of_attacks = [self.fire_tail, self.fire_scratch]
         random_attack = random.choice(list_of_attacks)
-        damage = random_attack()
-        return damage
+        damage, special_effect = random_attack()
+        return damage, special_effect
 
 
     def fire_tail(self):
         print("Charmeleon uses Fire Tail!")
         damage = 50
-        return damage
+        return damage, None
 
     def fire_scratch(self):
         print("Charmeleon uses Fire Scratch")
         damage = 50
-        return damage
+        return damage, None
 
     def use_attack(self):
         i = 1
@@ -380,12 +415,12 @@ class Charmander(Pokemon):
     def attack(self):
         print("Charmander uses Ember!")
         damage = 30
-        return damage
+        return damage, None
 
     def ember(self):
         print("Charmander uses Ember!")
         damage = 30
-        return damage
+        return damage, None
 
     def use_attack(self):
         i = 1
@@ -817,9 +852,26 @@ class Mewtwo(Pokemon):
     def get_name(self):
         return self.name
 
+        
+class StatusEffect:
+    def __init__(self, name, duration, damage_per_turn=0):
+        self.name = name
+        self.duration = duration
+        self.damage_per_turn = damage_per_turn
+
+    def apply_effect(self, target):
+        if self.damage_per_turn > 0:
+            for _ in range(self.duration):
+                print(f"{target.name} takes {self.damage_per_turn} damage from {self.name}!")
+                target.hp -= self.damage_per_turn
+        else:
+            print(f"{target.name} is {self.name}!")
+
+    def __str__(self):
+        return self.name
+
 
 mewtwo = Mewtwo("Mewtwo", 300)
-
 
 def main():
     players_backpack = []
