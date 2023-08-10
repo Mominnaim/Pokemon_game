@@ -40,13 +40,13 @@ Rules to the Game:
   - Scratch: Deals 30 damage.
 
 ### Charmeleon
-- Health: 150
+- Health: 200
 - Attacks:
   - Fire Tail: Deals 50 damage.
   - Fire Scratch: Deals 50 damage.
 
 ### Charizard
-- Health: 200
+- Health: 300
 - Attacks:
   - Crimson Strike: Deals 75 damage.
   - Fire Breathe: Deals 60 damage and may inflict burn.
@@ -58,13 +58,13 @@ Rules to the Game:
   - Scratch: Deals 30 damage.
 
 ### Wartortle
-- Health: 150
+- Health: 200
 - Attacks:
   - Water Pump: Deals 50 damage.
   - Waterfall: Deals 50 damage.
 
 ### Blastoise
-- Health: 200
+- Health: 300
 - Attacks:
   - Hydro Pump: Deals 75 damage.
   - Tsunami: Deals 90 damage.
@@ -76,13 +76,13 @@ Rules to the Game:
   - Scratch: Deals 30 damage.
 
 ### Ivysaur
-- Health: 150
+- Health: 200
 - Attacks:
   - Pollen Power: Deals 30 damage.
   - Branch Slap: Deals 30 damage.
 
 ### Venusaur
-- Health: 200
+- Health: 300
 - Attacks:
   - Jungle Hammer: Deals 60 damage.
   - Forest Whip: Deals 75 damage.
@@ -100,7 +100,7 @@ Rules to the Game:
   - Mind Twist: Deals 50 damage.
 
 ### Alakazam
-- Health: 150
+- Health: 300
 - Attacks:
   - Power of Zen: Deals 50 damage.
   - Mantra Kick: Deals 75 damage.
@@ -112,19 +112,19 @@ Rules to the Game:
   - Scratch: Deals 30 damage.
 
 ### Monferno
-- Health: 150
+- Health: 200
 - Attacks:
   - Fire Punch: Deals 50 damage.
   - Fire Slap: Deals 50 damage.
 
 ### Infernape
-- Health: 200
+- Health: 300
 - Attacks:
   - Volcanic Punch: Deals 75 damage.
   - Lava Rain: Deals 50 damage.
 
 ### Mewtwo
-- Health: 250
+- Health: 400
 - Attacks:
   - Pulse Ray: Deals 75 damage.
   - Major Beatdown: Deals 60 damage.
