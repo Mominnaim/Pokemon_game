@@ -509,6 +509,7 @@ class Abra(Pokemon):
         damage = 30
         return damage
 
+
 class Kadabra(Pokemon):
     def __init__(self, name, hp):
         super().__init__(name, hp)
