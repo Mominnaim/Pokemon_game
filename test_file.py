@@ -55,8 +55,8 @@ def test_evolution_charmeleon():
     backpack = [pokemon_1]
     ash = Player(backpack)
     ash.evolve_pokemon("charmeleon")
-    for poke in backpack:
-        assert poke.name == "charizard"
+    assert isinstance(ash.backpack[0], Charizard)
+
 
 
 # Test eight
@@ -212,3 +212,76 @@ def test_use_attack_mewtwo():
         assert mewtwo.use_attack() == 60
 
 
+def test_evolution():
+    charmander = Charmander("charmander",100)
+    back_1 = [charmander]
+    ash_1 = Player(back_1)
+
+    pokemon_2 = Charmeleon("charmeleon", 200)
+    back_2 = [pokemon_2]
+    ash_2 = Player(back_2)
+
+    chimchar = Chimchar("chimchar", 100)
+    back_3 = [chimchar]
+    ash_3 = Player(back_3)
+
+    monferno = Monferno("monferno",200)
+    back_4 = [monferno]
+    ash_4 = Player(back_4)
+
+    squirtle = Squirtle("squirtle", 100)
+    back_5 = [squirtle]
+    ash_5 = Player(back_5)
+
+    wartortle = Wartortle("wartortle", 200)
+    back_6 = [wartortle]
+    ash_6 = Player(back_6)
+
+    bulbasaur = Bulbasaur("bulbasaur",100)
+    back_7 = [bulbasaur]
+    ash_7 = Player(back_7)
+
+    ivysaur = Ivysaur("ivysaur",200)
+    back_8 = [ivysaur]
+    ash_8 = Player(back_8)
+
+    abra = Abra("abra",100)
+    back_9 = [abra]
+    ash_9 = Player(back_9)
+
+    kadabra = Kadabra("kadabra",200)
+    back_10 = [kadabra]
+    ash_10 = Player(back_10)
+
+    ash_1.evolve_pokemon("charmander")
+    assert isinstance(ash_1.backpack[0], Charmeleon)
+    ash_2.evolve_pokemon("charmeleon")
+    assert isinstance(ash_2.backpack[0], Charizard)
+    ash_3.evolve_pokemon("chimchar")
+    assert isinstance(ash_3.backpack[0], Monferno)
+    ash_4.evolve_pokemon("monferno")
+    assert isinstance(ash_4.backpack[0], Infernape)
+    ash_5.evolve_pokemon("squirtle")
+    assert isinstance(ash_5.backpack[0], Wartortle)
+    ash_6.evolve_pokemon("wartortle")
+    assert isinstance(ash_6.backpack[0], Blastoise)
+    ash_7.evolve_pokemon("bulbasaur")
+    assert isinstance(ash_7.backpack[0], Ivysaur)
+    ash_8.evolve_pokemon("ivysaur")
+    assert isinstance(ash_8.backpack[0], Venusaur)
+    ash_9.evolve_pokemon("abra")
+    assert isinstance(ash_9.backpack[0], Kadabra)
+    ash_10.evolve_pokemon("kadabra")
+    assert isinstance(ash_10.backpack[0], Alakazam)
+         
+
+
+
+
+
+
+
+
+
+
+    
