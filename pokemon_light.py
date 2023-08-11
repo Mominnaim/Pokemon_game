@@ -93,7 +93,7 @@ class game_engine(object):
 
                     # In this case you are evolving a pokemon.
 
-                    pick_pokemon = input("Pick a pokemon from your backpack to evolve \nType in the number =>")
+                    pick_pokemon = int(input("Pick a pokemon from your backpack to evolve \nType in the number =>"))
                     if pick_pokemon == "1":
                         evolving_pokemon = self.player.backpack[0]
                         self.player.evolve_pokemon(evolving_pokemon.name)
@@ -379,8 +379,7 @@ class Charmeleon(Pokemon):
     def attack(self):
         list_of_attacks = [self.fire_tail, self.fire_scratch]
         random_attack = random.choice(list_of_attacks)
-        damage, special_effect = random_attack()
-        return damage, special_effect
+        return damage, None
 
 
     def fire_tail(self):
