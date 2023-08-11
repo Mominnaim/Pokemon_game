@@ -369,14 +369,14 @@ class Chimchar(Pokemon):
 class Monferno(Pokemon):
     def __init__(self, name, hp):
         super().__init__(name, hp)
-        self.attacking = {"Fire Punch": self.attack_one, "Fire Slap": self.fire_slap}
+        self.attacking = {"Fire Punch": self.attack_one, "Fire Slap": self.attack_two}
 
     def attack_one(self):
         print("Monferno uses Fire punch")
         damage = 50
         return damage
 
-    def fire_slap(self):
+    def attack_two(self):
         print("Monferno uses Fire slap")
         damage = 50
         return damage
@@ -469,12 +469,12 @@ class Ivysaur(Pokemon):
 
     def attack_one(self):
         print("Ivysaur uses Pollen Powder")
-        damage = 30
+        damage = 50
         return damage
 
     def attack_two(self):
         print("Ivysaur uses branch slap")
-        damage = 30
+        damage = 50
         return damage
 
 
