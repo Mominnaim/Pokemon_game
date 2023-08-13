@@ -2,7 +2,7 @@ POKEMON LIGHT
 
 Summary: A simple pokemon game that consist of 8 rounds which includes fighting, collecting, and evolving. 
 
-Which Pokemons are in the Game
+Which Pokemon are in the Game
 
     - Charmander evolution
     - Chimchar evolution
@@ -29,6 +29,7 @@ Rules to the Game:
         - If your pokemon dies, then you lose that pokemon.
         - You can pick which pokemon to fight, and what attack it should do.
         - Which ever pokemon deals the final blow, evolves.
+          - It regains its health as well.
         - The pokemon does not go back to full health, and stays at what ever health it finished the previous fight off at.
         
 ## Pokemon

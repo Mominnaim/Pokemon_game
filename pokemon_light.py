@@ -39,7 +39,7 @@ class game_engine(object):
 
             print("This is the the pokemon in your backpack")
             for i in self.player.backpack:
-                print(f'{i.name}')
+                print(f'{i.name},{i.hp}')
             print()
 
         # This is the actual part where the main game is played and commences the round from 1-8
@@ -95,7 +95,7 @@ class game_engine(object):
 
                 level_one_pokemon = [wild_abra, wild_bulbasaur, wild_charmander, wild_chimchar, wild_squirtle]
                 opponent_pokemon = random.choice(level_one_pokemon)
-                self.battle_arena(wild_chimchar)
+                self.battle_arena(opponent_pokemon)
             elif rounds == 4:
                 wild_charmeleon = Charmeleon("wild charmeleon", 200)
                 wild_ivysaur = Ivysaur("wild ivysaur", 200)
@@ -105,7 +105,7 @@ class game_engine(object):
 
                 level_two_pokemon = [wild_charmeleon, wild_kadabra, wild_ivysaur, wild_monferno, wild_wortortle]
                 opponent_pokemon = random.choice(level_two_pokemon)
-                self.battle_arena(wild_charmeleon)
+                self.battle_arena(opponent_pokemon)
             elif rounds == 6:
                 wild_alakazam = Alakazam("a wild Alakazam", 300)
                 wild_venusaur = Venusaur("a wild Venusaur", 300)
@@ -114,11 +114,12 @@ class game_engine(object):
                 wild_infernape = Infernape("a wild Infernape", 300)
                 level_three_pokemon = [wild_charizard, wild_infernape, wild_alakazam, wild_venusaur, wild_blastoise]
                 opponent_pokemon = random.choice(level_three_pokemon)
-                self.battle_arena(wild_charizard)
+                self.battle_arena(opponent_pokemon)
 
                 # This is the boss fight.
             elif rounds == 8:
                 print("Get ready to fight the boss MEWTWO!!!")
+                mewtwo = Mewtwo("Mewtwo", 300)
                 self.battle_arena(mewtwo)
 
             rounds = rounds + 1
@@ -130,7 +131,7 @@ class game_engine(object):
         print("Choose one of your pokemon to be your battling pokemon.\n")
         number = 1
         for i in self.player.backpack:
-            print(f'{number} -> {i.name}')
+            print(f'{number} -> {i.name},{i.hp}')
             number = number + 1
 
         battling_pokemon = int(input("\n=> "))
@@ -149,6 +150,9 @@ class game_engine(object):
 
             # If the enemy pokemon dies, you win and your pokemon evolves.
             if pokemon_2.hp <= 0:
+                if pokemon_2.name == "Mewtwo":
+                    print("You have beat Mewtwo and saved the world!")
+                    exit(0)
                 print(f"{pokemon_2.name} has lost, and you win the game")
                 self.player.evolve_pokemon(pokemon_1.name)
                 return True
@@ -169,7 +173,7 @@ class game_engine(object):
                 if len(self.player.backpack) != 0:
                     number = 1
                     for i in self.player.backpack:
-                        print(f'{number} -> {i.name}')
+                        print(f'{number} -> {i.name},{i.hp}')
                         number = number + 1
                     battling_pokemon = int(input("\n=> "))
                     pokemon_1 = self.player.backpack[battling_pokemon - 1]
@@ -258,6 +262,8 @@ class Player(object):
                     self.backpack.pop(i)
                     alakazam = Alakazam("alakazam", 300)
                     self.backpack.insert(i, alakazam)
+        elif evolved_pokemon in ["charizard","alakazam","infernape","venusaur","blastoise"]:
+            print(f"{evolved_pokemon} has reached final evolution\n")
         else:
             print("Invalid Pokemon name for evolution.")
             return False
@@ -556,9 +562,6 @@ class Mewtwo(Pokemon):
         print("Mewtwo uses Major beatdown")
         damage = 60
         return damage
-
-
-mewtwo = Mewtwo("Mewtwo", 300)
 
 
 def main():
