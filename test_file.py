@@ -4,6 +4,22 @@ from .pokemon_light import Pokemon, Charmander, Charmeleon, Charizard, Player,Ch
 from .pokemon_light import Abra,Kadabra,Alakazam,Mewtwo
 
 
+chimchar = Chimchar("chimchar", 100)
+monferno = Monferno("monferno",200)
+infernape = Infernape("infernape",300)
+squirtle = Squirtle("squirtle", 100)
+wartortle = Wartortle("wartortle", 200)
+blastoise =Blastoise("blastoise",300)
+bulbasaur = Bulbasaur("bulbasaur",100)
+ivysaur = Ivysaur("ivysaur",200)
+venusaur = Venusaur("venusaur",300)
+abra = Abra("abra",100)
+kadabra = Kadabra("kadabra",200)
+alakazam = Alakazam("alakazam",300)
+
+
+
+
 # test one
 def test_attack_charmander():
     pokemon_1 = Charmander("Charmander", 100)
@@ -25,6 +41,14 @@ def test_attack_one_charizard():
     damage = pokemon_1.attack_one()
     damage_1 = pokemon_1.attack_two()
     assert damage == 75 and damage_1 == 60
+
+def test_attack_bulbasaur():
+    damage = bulbasaur.attack_one()
+    damage_1 = bulbasaur.attack_two()
+    assert damage == 30 and damage_1 == 30
+
+def test_attack_ivysaur():
+    pass
 
 
 # Test eight
@@ -61,6 +85,12 @@ def test_use_attack_charizard():
         assert charizard.use_attack() == 75
     with mock.patch('builtins.input', return_value="2"):
         assert charizard.use_attack() == 60
+
+def test_random_attack_charizard():
+    yerr = Charizard("yes",400)
+
+    damage = yerr.random_attack()
+    assert damage == 75 or damage == 60
 
 # Test twelve
 def test_use_attack_chimchar():
