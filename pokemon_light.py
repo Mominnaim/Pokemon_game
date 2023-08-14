@@ -129,10 +129,7 @@ class game_engine(object):
 
         # You get to choose your battling pokemon
         print("Choose one of your pokemon to be your battling pokemon.\n")
-        number = 1
-        for i in self.player.backpack:
-            print(f'{number} -> {i.name},{i.hp}')
-            number = number + 1
+        self.player.print_backpack()
 
         battling_pokemon = int(input("\n=> "))
         pokemon_1 = self.player.backpack[battling_pokemon - 1]
@@ -171,10 +168,7 @@ class game_engine(object):
                 print(f"Your {pokemon_1.name} has lost.\n")
                 self.player.backpack.remove(pokemon_1)
                 if len(self.player.backpack) != 0:
-                    number = 1
-                    for i in self.player.backpack:
-                        print(f'{number} -> {i.name},{i.hp}')
-                        number = number + 1
+                    self.player.print_backpack()
                     battling_pokemon = int(input("\n=> "))
                     pokemon_1 = self.player.backpack[battling_pokemon - 1]
                     print(f"You threw in {pokemon_1.name} to fight")
@@ -270,6 +264,10 @@ class Player(object):
 
         for i, poke in enumerate(self.backpack):
             print(poke.name, "\n")
+
+    def print_backpack(self):
+        for i,poke in enumerate(self.backpack):
+            print(f"{i+1}-->{poke.name}, with {poke.hp} health ")
 
 
 class Pokemon:
