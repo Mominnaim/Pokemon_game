@@ -125,59 +125,50 @@ class game_engine(object):
             rounds = rounds + 1
 
     # This is where the battle takes place
-    def battle_arena(self, pokemon_2):
+    def battle_arena(self, opponent_pokemon):
 
-        # You get to choose your battling pokemon
         print("Choose one of your pokemon to be your battling pokemon.\n")
-        self.player.print_backpack()
+        pokemon_1 = self.player.choose_pokemon()
+        game_rounds = 1
 
-        battling_pokemon = int(input("\n=> "))
-        pokemon_1 = self.player.backpack[battling_pokemon - 1]
-
-        # The actual game
         while len(self.player.backpack) != 0:
-
             print(f"It is now {pokemon_1.name}\'s turn to attack")
 
-            damage = pokemon_1.use_attack()
-
-            print(f"{pokemon_1.name} attacks {pokemon_2.name} for {damage} health")
-            time.sleep(1)
-            pokemon_2.hp = pokemon_2.hp - damage
-
-            # If the enemy pokemon dies, you win and your pokemon evolves.
-            if pokemon_2.hp <= 0:
-                if pokemon_2.name == "Mewtwo":
-                    print("You have beat Mewtwo and saved the world!")
-                    exit(0)
-                print(f"{pokemon_2.name} has lost, and you win the game")
+            self.my_pokemon(opponent_pokemon, pokemon_1)
+            if self.alive(opponent_pokemon):
                 self.player.evolve_pokemon(pokemon_1.name)
                 return True
+
+            self.wild_pokemon(pokemon_1, opponent_pokemon)
+            self.alive(pokemon_1)
+
+    def alive(self, pokemon):
+        print(f'{pokemon.name} has {pokemon.hp} left\n')
+        if pokemon.hp <= 0:
+            if isinstance(pokemon, Mewtwo):
+                print(f'You beat the boss {pokemon.name}!!')
+                exit()
+            elif pokemon in self.player.backpack:
+                self.player.backpack.remove(pokemon)
+                pokemon_1 = self.player.choose_pokemon()
+                return pokemon_1
             else:
-                print(f"{pokemon_2.name} has {pokemon_2.hp} health left\n")
+                print(f'You have beat a {pokemon.name}')
+                return True
 
-            print(f"It is now {pokemon_2.name}\'s turn to attack")
-            damage = pokemon_2.random_attack()
+    def my_pokemon(self, opponent_pokemon, pokemon_1):
+        damage = pokemon_1.use_attack()
+        print(f"{pokemon_1.name} attacks {opponent_pokemon.name} for {damage} health")
+        time.sleep(1)
+        opponent_pokemon.hp = opponent_pokemon.hp - damage
+        return opponent_pokemon.hp
 
-            print(f"{pokemon_2.name} attacks {pokemon_1.name} for {damage} health")
-            pokemon_1.hp = pokemon_1.hp - damage
-            time.sleep(1)
-
-            # If your pokemon dies, then you pick another pokemon to fight, and if your back is empty, then you lose.
-            if pokemon_1.hp <= 0:
-                print(f"Your {pokemon_1.name} has lost.\n")
-                self.player.backpack.remove(pokemon_1)
-                if len(self.player.backpack) != 0:
-                    self.player.print_backpack()
-                    battling_pokemon = int(input("\n=> "))
-                    pokemon_1 = self.player.backpack[battling_pokemon - 1]
-                    print(f"You threw in {pokemon_1.name} to fight")
-                    print(f"{pokemon_1.name} has {pokemon_1.hp} health\n")
-                    time.sleep(1)
-                elif len(self.player.backpack) == 0:
-                    exit(f"You have lost against {pokemon_2.name}")
-            else:
-                print(f"{pokemon_1.name} has {pokemon_1.hp} health left\n")
+    def wild_pokemon(self, my_pokemon, opponent_pokemon):
+        damage = opponent_pokemon.random_attack()
+        print(f"{opponent_pokemon.name} attacks {my_pokemon.name} for {damage} health")
+        time.sleep(1)
+        my_pokemon.hp = my_pokemon.hp - damage
+        return my_pokemon.hp
 
 
 class Player(object):
@@ -256,7 +247,7 @@ class Player(object):
                     self.backpack.pop(i)
                     alakazam = Alakazam("alakazam", 300)
                     self.backpack.insert(i, alakazam)
-        elif evolved_pokemon in ["charizard","alakazam","infernape","venusaur","blastoise"]:
+        elif evolved_pokemon in ["charizard", "alakazam", "infernape", "venusaur", "blastoise"]:
             print(f"{evolved_pokemon} has reached final evolution\n")
         else:
             print("Invalid Pokemon name for evolution.")
@@ -265,9 +256,14 @@ class Player(object):
         for i, poke in enumerate(self.backpack):
             print(poke.name, "\n")
 
-    def print_backpack(self):
-        for i,poke in enumerate(self.backpack):
-            print(f"{i+1}-->{poke.name}, with {poke.hp} health ")
+    def choose_pokemon(self):
+        for i, poke in enumerate(self.backpack):
+            print(f"{i + 1}-->{poke.name}, with {poke.hp} health ")
+
+        battling_pokemon = int(input("\n=> "))
+        pokemon_1 = self.backpack[battling_pokemon - 1]
+
+        return pokemon_1
 
 
 class Pokemon:
@@ -571,3 +567,8 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+# clean battle_arena - goal is 10-20 lines --> 1
+# What ever is being used twice, turn it into a function. --> 2
+# work on special effects on another branch -- 3
+# Book chapter exercise -> 48, 49 --> 4
