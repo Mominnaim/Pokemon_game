@@ -568,7 +568,7 @@ def main():
 if __name__ == "__main__":
     main()
 
-# clean battle_arena - goal is 10-20 lines --> 1
-# What ever is being used twice, turn it into a function. --> 2
 # work on special effects on another branch -- 3
 # Book chapter exercise -> 48, 49 --> 4
+
+
