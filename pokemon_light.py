@@ -144,7 +144,8 @@ class game_engine(object):
 
             self.wild_pokemon_attack(pokemon_1, opponent_pokemon)
             pokemon_1.apply_special_effects()
-            self.alive(pokemon_1)
+            if pokemon_1.hp <= 0:
+                pokemon_1 = self.alive(pokemon_1)
 
 
 
@@ -156,9 +157,12 @@ class game_engine(object):
                 print(f'You beat the boss {pokemon.name}!!')
                 exit()
             elif pokemon in self.player.backpack:
-                print(f"{pokemon.name} has died, pick a new pokemon to fight.")
+                print(f"{pokemon.name} has died.")
                 self.player.backpack.remove(pokemon)
+                if len(self.player.backpack) == 0:
+                    exit("All your pokemons have died,Game Over!!")
                 pokemon_1 = self.player.choose_pokemon()
+
                 return pokemon_1
             else:
                 print(f'You have beat a {pokemon.name}')
@@ -178,7 +182,7 @@ class game_engine(object):
 
         print(f"{pokemon_1.name} attacks {opponent_pokemon.name} for {damage} health")
         time.sleep(1)
-        opponent_pokemon.hp = max(opponent_pokemon.hp - damage, 0)  # Ensure HP doesn't go negative
+        opponent_pokemon.hp = max(opponent_pokemon.hp - damage, 0)
         return opponent_pokemon.hp
 
     # The wild pokemon attacks
@@ -194,7 +198,7 @@ class game_engine(object):
 
         print(f"{opponent_pokemon.name} attacks {my_pokemon.name} for {damage} health")
         time.sleep(1)
-        my_pokemon.hp = my_pokemon.hp - damage
+        my_pokemon.hp = max(my_pokemon.hp - damage, 0)
         return my_pokemon.hp
 
 
