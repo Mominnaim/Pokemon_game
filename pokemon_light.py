@@ -146,6 +146,8 @@ class game_engine(object):
             pokemon_1.apply_special_effects()
             if pokemon_1.hp <= 0:
                 pokemon_1 = self.alive(pokemon_1)
+            elif pokemon_1.hp > 0:
+                print(f'{pokemon_1.name} has {pokemon_1.hp} left\n')
 
 
 
@@ -167,6 +169,8 @@ class game_engine(object):
             else:
                 print(f'You have beat a {pokemon.name}')
                 return True
+
+
 
     # The user pokemon attacks
     def my_pokemon_attack(self, opponent_pokemon, pokemon_1):
@@ -370,7 +374,7 @@ class HealingSpecialEffect:
 class Charizard(Pokemon):
     def __init__(self, name, hp):
         super().__init__(name, hp)
-        self.attacking = {"Crimson strike": self.attack_one, "Fire breathe": self.attack_two}
+        self.attacking = {"Crimson strike (75)": self.attack_one, "Fire breathe (60)": self.attack_two}
 
     def attack_one(self,opponent_pokemon):
         print("Charizard uses Crimson Strike!")
@@ -388,7 +392,7 @@ class Charizard(Pokemon):
 class Charmeleon(Pokemon):
     def __init__(self, name, hp):
         super().__init__(name, hp)
-        self.attacking = {"Fire tail": self.attack_one, "Fire scratch": self.attack_two}
+        self.attacking = {"Fire tail (50)": self.attack_one, "Fire scratch (50)": self.attack_two}
 
     def attack_one(self,opponent_pokemon):
         print("Charmeleon uses Fire Tail!")
@@ -404,7 +408,7 @@ class Charmeleon(Pokemon):
 class Charmander(Pokemon):
     def __init__(self, name, hp):
         super().__init__(name, hp)
-        self.attacking = {"Ember": self.attack_one, "Scratch": self.attack_two}
+        self.attacking = {"Ember (30)": self.attack_one, "Scratch (30)": self.attack_two}
 
     def attack_two(self,opponent_pokemon):
         print("Charmander uses Scratch!")
@@ -420,7 +424,7 @@ class Charmander(Pokemon):
 class Chimchar(Pokemon):
     def __init__(self, name, hp):
         super().__init__(name, hp)
-        self.attacking = {"Ember": self.attack_one, "Scratch": self.attack_two}
+        self.attacking = {"Ember (30)": self.attack_one, "Scratch (30)": self.attack_two}
 
     def attack_one(self,opponent_pokemon):
         print("Chimchar uses Ember!")
@@ -436,7 +440,7 @@ class Chimchar(Pokemon):
 class Monferno(Pokemon):
     def __init__(self, name, hp):
         super().__init__(name, hp)
-        self.attacking = {"Fire Punch": self.attack_one, "Fire Slap": self.attack_two}
+        self.attacking = {"Fire Punch (50)": self.attack_one, "Fire Slap (50)": self.attack_two}
 
     def attack_one(self,opponent_pokemon):
         print("Monferno uses Fire punch")
@@ -452,7 +456,7 @@ class Monferno(Pokemon):
 class Infernape(Pokemon):
     def __init__(self, name, hp):
         super().__init__(name, hp)
-        self.attacking = {"Volcanic Punch": self.attack_one, "Lava Rain": self.attack_two}
+        self.attacking = {"Volcanic Punch (75)": self.attack_one, "Lava Rain (45)": self.attack_two}
 
     def attack_one(self,opponent_pokemon):
         print("Infernape uses Volcanic punch!")
@@ -462,13 +466,15 @@ class Infernape(Pokemon):
     def attack_two(self, opponent_pokemon):
         print("Infernape uses Lava rain")
         damage = 50
+        burn_effect = DamageSpecialEffect("Burn", duration=3, damage_per_turn=45)
+        opponent_pokemon.add_special_effect(burn_effect)  # Attach the effect to the opponent
         return damage
 
 
 class Squirtle(Pokemon):
     def __init__(self, name, hp):
         super().__init__(name, hp)
-        self.attacking = {"Water Gun": self.attack_one, "Scratch": self.attack_two}
+        self.attacking = {"Water Gun (30)": self.attack_one, "Scratch (30)": self.attack_two}
 
     def attack_one(self,opponent_pokemon):
         print("Squirtle uses Water gun!")
@@ -484,7 +490,7 @@ class Squirtle(Pokemon):
 class Wartortle(Pokemon):
     def __init__(self, name, hp):
         super().__init__(name, hp)
-        self.attacking = {"Water Pump": self.attack_one, "Waterfall": self.attack_two}
+        self.attacking = {"Water Pump (50)": self.attack_one, "Waterfall (50)": self.attack_two}
 
     def attack_one(self,opponent_pokemon):
         print("Wartortle uses Water fall!")
@@ -516,7 +522,7 @@ class Blastoise(Pokemon):
 class Bulbasaur(Pokemon):
     def __init__(self, name, hp):
         super().__init__(name, hp)
-        self.attacking = {"Vine whip": self.attack_one, "Scratch": self.attack_two}
+        self.attacking = {"Vine whip (30)": self.attack_one, "Scratch (30)": self.attack_two}
 
     def attack_one(self,opponent_pokemon):
         print("Bulbasaur uses vine whip")
@@ -532,7 +538,7 @@ class Bulbasaur(Pokemon):
 class Ivysaur(Pokemon):
     def __init__(self, name, hp):
         super().__init__(name, hp)
-        self.attacking = {"Pollen Power": self.attack_one, "Branch Slap": self.attack_two}
+        self.attacking = {"Pollen Power (50)": self.attack_one, "Branch Slap (50)": self.attack_two}
 
     def attack_one(self,opponent_pokemon):
         print("Ivysaur uses Pollen Powder")
@@ -548,14 +554,16 @@ class Ivysaur(Pokemon):
 class Venusaur(Pokemon):
     def __init__(self, name, hp):
         super().__init__(name, hp)
-        self.attacking = {"Jungle Hammer": self.attack_one, "Forest whip": self.attack_two}
+        self.attacking = {"Jungle Hammer (60)": self.attack_one, "Poison Bomb (75)": self.attack_two}
 
-    def attack_one(self,opponent_pokemon):
-        print("Venusaur uses Forest whip!")
+    def attack_two(self,opponent_pokemon):
+        print("Venusaur uses Poison Bomb!")
         damage = 60
+        burn_effect = DamageSpecialEffect("Poison", duration=3, damage_per_turn=30)
+        opponent_pokemon.add_special_effect(burn_effect)  # Attach the effect to the opponent
         return damage
 
-    def attack_two(self, opponent_pokemon):
+    def attack_one(self, opponent_pokemon):
         print("Venusaur uses Jungle hammer!")
         damage = 75
         return damage
@@ -564,7 +572,7 @@ class Venusaur(Pokemon):
 class Abra(Pokemon):
     def __init__(self, name, hp):
         super().__init__(name, hp)
-        self.attacking = {"Slap": self.attack_one, "Scratch": self.attack_two}
+        self.attacking = {"Slap (30)": self.attack_one, "Scratch (30)": self.attack_two}
 
     def attack_one(self,opponent_pokemon):
         print("Abra uses slap!")
@@ -580,7 +588,7 @@ class Abra(Pokemon):
 class Kadabra(Pokemon):
     def __init__(self, name, hp):
         super().__init__(name, hp)
-        self.attacking = {"Psychic Slap": self.attack_one, "Mind Twist": self.attack_two}
+        self.attacking = {"Psychic Slap (50)": self.attack_one, "Mind Twist (50)": self.attack_two}
 
     def attack_one(self,opponent_pokemon):
         print("Kadabra uses Psychic Slap!")
@@ -596,10 +604,12 @@ class Kadabra(Pokemon):
 class Alakazam(Pokemon):
     def __init__(self, name, hp):
         super().__init__(name, hp)
-        self.attacking = {"Power of Zen": self.attack_one, "Mantra Kick": self.attack_two}
+        self.attacking = {"Power of Zen (50)": self.attack_one, "Mantra Kick (50)": self.attack_two}
 
     def attack_one(self,opponent_pokemon):
         print("Alakazam uses the Power of Zen")
+        healing_effect = HealingSpecialEffect("Meditation", duration=3, healing_per_turn=50)
+        self.add_special_effect(healing_effect)  # Attach the effect to the opponent
         damage = 50
         return damage
 
